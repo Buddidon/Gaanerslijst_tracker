@@ -5,7 +5,7 @@ on:
     # 22:00 Belgische tijd = 20:00 UTC (zomertijd).
     # Let op: bij overgang naar wintertijd wordt dit 21:00 UTC;
     # pas de cron dan aan.
-    - cron: "0 20 * * *"
+    - cron: "7 20 * * *"
   workflow_dispatch:
 
 permissions:
