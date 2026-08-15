@@ -1,0 +1,41 @@
+name: Dagelijkse Gaanerslijst Snapshot
+
+on:
+  schedule:
+    # 22:00 Belgische tijd = 20:00 UTC (zomertijd).
+    # Let op: bij overgang naar wintertijd wordt dit 21:00 UTC;
+    # pas de cron dan aan.
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Python installeren
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Afhankelijkheden installeren
+        run: pip install pandas matplotlib
+
+      - name: Snapshot ophalen
+        run: python snapshot.py
+
+      - name: Grafiek maken
+        run: python make_graph.py
+
+      - name: Wijzigingen committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add history_file.csv data.csv gaaners_progressie.png
+          git commit -m "Snapshot $(date -u +%Y-%m-%d)" || echo "Niets te committen"
+          git push
