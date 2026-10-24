@@ -39,7 +39,7 @@ def plot(pivot):
     fig, ax = plt.subplots(figsize=(14, 8))
     laatste_score = pivot.iloc[-1].sort_values(ascending=False)
     top_namen = laatste_score.index.tolist()
-    kleuren = plt.cm.tab20.colors
+    kleuren = plt.cm.tab20.colors + plt.cm.tab20b.colors + plt.cm.tab20c.colors
 
     for i, naam in enumerate(top_namen):
         kleur = kleuren[i % len(kleuren)]
